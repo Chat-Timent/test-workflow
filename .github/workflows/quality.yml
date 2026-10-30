@@ -153,4 +153,6 @@ jobs:
           uses: docker/build-push-action@v7
           with:
             context: .
+            push: true
+            tags: ${{ secrets.DOCKER_HUB_USERNAME }}/sym-demo-ci-cd:latest
             
