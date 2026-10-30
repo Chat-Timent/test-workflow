@@ -161,7 +161,7 @@ jobs:
       continue-on-error: false
       steps:
         - name: récupérer le dépot
-          runs: actions/checkout@v7
+          run: actions/checkout@v7
 
         - name: déployr l'app
           uses: appleboy/ssh-action@v1
