@@ -89,7 +89,7 @@ jobs:
               image: mysql:8.0
               env:
                 MYSQL_ROOT_PASSWORD: testpass
-                MYSQL_DATABASE: testdb
+                MYSQL_DATABASE: testdb_test
               ports:
                 - 3306:3306
               options: >-
@@ -125,9 +125,8 @@ jobs:
           run: composer install --no-progress --no-interaction --prefer-dist
 
         - name: créer la base de données
-          run: | 
-            php bin/console doctrine:database:create --no-interactions 
-            --if-not-exists
+          run: |
+            php bin/console doctrine:database:create --no-interactions --if-not-exists
             php bin/console doctrine:schema:create --no-interaction
 
         - name: charger les fixtures
