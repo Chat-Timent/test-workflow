@@ -155,4 +155,22 @@ jobs:
             context: .
             push: true
             tags: ${{ secrets.DOCKER_HUB_USERNAME }}/sym-demo-ci-cd:latest
+
+    deploy:
+      runs-on: ubuntu-latest
+      continue-on-error: false
+      steps:
+        - name: récupérer le dépot
+          runs: actions/checkout@v7
+
+        - name: déployr l'app
+          uses: appleboy/ssh-action@v1
+
+          with:
+            host: ${{ secrets.SSH_HOST }}
+            username: ${{ secrets.SSH_USERNAME }}
+            password: ${{ secrets.SSH_PRIVATE_KEY }}
+            port: ${{ secrets.SSH_PORT }}
+            script: |
+              mkdir -p testapp
             
