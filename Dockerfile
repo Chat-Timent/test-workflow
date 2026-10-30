@@ -1,24 +1,50 @@
-FROM php:8.4-apache
+FROM php:8.5-apache
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends libicu-dev \
-    && docker-php-ext-install intl pdo_sqlite \
-    && a2enmod rewrite \
+ARG TIMEZONE="Europe/Paris"
+ENV DEBIAN_FRONTEND=noninteractive
+
+# ── System tools ────────────────────────────────────────────────────
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    acl \
+    ca-certificates \
+    curl \
+    git \
+    gnupg \
+    nano \
+    unzip \
+    wget \
+    zip \
     && rm -rf /var/lib/apt/lists/*
 
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+# ── PHP extensions (install-php-extensions gère les dépendances) ────
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+RUN chmod +x /usr/local/bin/install-php-extensions
 
-ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+RUN install-php-extensions \
+    gd \
+    intl \
+    opcache \
+    pdo_mysql \
+    zip \
+    apcu \
+    redis \
+    xdebug
+
+# ── Timezone ────────────────────────────────────────────────────────
+RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
+    && echo ${TIMEZONE} > /etc/timezone
+
+# ── Apache modules ─────────────────────────────────────────────────
+RUN a2enmod rewrite headers
+
+# ── Composer ────────────────────────────────────────────────────────
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+
+
+
+
 WORKDIR /var/www/html
 
-RUN sed -ri 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
-    && sed -ri 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
-
-COPY . .
-
-ENV APP_ENV=prod APP_DEBUG=0
-
-RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader \
-    && php bin/console asset-map:compile
-
 EXPOSE 80
+
+CMD ["apache2-foreground"]
