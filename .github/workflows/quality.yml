@@ -173,5 +173,10 @@ jobs:
             key: ${{ secrets.SSH_PRIVATE_KEY }}
             port: ${{ secrets.SSH_PORT }}
             script: |
-              mkdir -p testapp
+              if [ -d ~/app/.git ]; then
+                cd ~/app
+                git pull
+              else
+                git clone ${{github.server_url}}/${{github.repository}}.git ~/app
+              fi
             
