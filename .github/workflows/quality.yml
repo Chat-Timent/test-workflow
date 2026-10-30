@@ -13,14 +13,15 @@ jobs:
         steps:
             - name: Récupérer le dépôt
               uses: actions/checkout@v7
+            - name: Récupérer le cache Composer
+              id: composer-cache
+              run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
             - name: Installer PHP
               uses: shivammathur/setup-php@v2
               with:
                 php-version: '8.5'
                 extensions: mbstring, intl
-            - name: Récupérer le cache Composer
-              id: composer-cache
-              run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
             - name: Mise en cache du Composer
               uses: actions/cache@v6
@@ -56,14 +57,15 @@ jobs:
         steps:
             - name: Récupérer le dépôt
               uses: actions/checkout@v7
+            - name: Récupérer le cache Composer
+              id: composer-cache
+              run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
             - name: Installer PHP
               uses: shivammathur/setup-php@v2
               with:
                 php-version: '8.5'
                 extensions: mbstring, intl
-            - name: Récupérer le cache Composer
-              id: composer-cache
-              run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
             - name: Mise en cache du Composer
               uses: actions/cache@v6
@@ -102,14 +104,15 @@ jobs:
         steps:
         - name: Récupérer le dépôt
           uses: actions/checkout@v7
+        - name: Récupérer le cache Composer
+          id: composer-cache
+          run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
         - name: Installer PHP
           uses: shivammathur/setup-php@v2
           with:
             php-version: '8.5'
             extensions: mbstring, intl
-        - name: Récupérer le cache Composer
-          id: composer-cache
-          run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
         - name: Mise en cache du Composer
           uses: actions/cache@v6

@@ -165,7 +165,7 @@ final class BlogController extends AbstractController
     }
 
     // Démo PHP CS Fixer : méthode volontairement mal formatée pour illustrer les corrections automatiques.
-    public function csFixerDemo($a, $b): int
+    public function csFixerDemo($a, $b)
     {
         $c = $a + $b;
         if ($c > 0) {
