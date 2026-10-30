@@ -157,6 +157,7 @@ jobs:
             tags: ${{ secrets.DOCKER_HUB_USERNAME }}/sym-demo-ci-cd:latest
 
     deploy:
+      needs: build-push
       runs-on: ubuntu-latest
       continue-on-error: false
       steps:
@@ -169,7 +170,7 @@ jobs:
           with:
             host: ${{ secrets.SSH_HOST }}
             username: ${{ secrets.SSH_USERNAME }}
-            password: ${{ secrets.SSH_PRIVATE_KEY }}
+            key: ${{ secrets.SSH_PRIVATE_KEY }}
             port: ${{ secrets.SSH_PORT }}
             script: |
               mkdir -p testapp
